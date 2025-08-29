@@ -1,0 +1,26 @@
+
+<header class="bg-white/80 backdrop-blur-md shadow-sm sticky top-0 z-50 border-b border-gray-200">
+  <nav class="container mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between h-16">
+      <div class="flex items-center">
+        <a routerLink="/" class="flex-shrink-0 flex items-center gap-2">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-cyan-600" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1.5 14.5v-9l6 4.5-6 4.5z"/>
+          </svg>
+          <span class="text-xl font-bold text-gray-800">آکادمی هوشمند</span>
+        </a>
+      </div>
+      <div class="hidden md:block">
+        <div class="ml-10 flex items-baseline space-x-4 space-x-reverse">
+          @for(link of navLinks; track link.path) {
+            <a [routerLink]="link.path" routerLinkActive="bg-cyan-50 text-cyan-700"
+               [routerLinkActiveOptions]="{exact: true}"
+               class="text-gray-600 hover:bg-gray-100 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium transition-colors">
+              {{ link.label }}
+            </a>
+          }
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>

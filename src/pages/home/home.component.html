@@ -1,0 +1,39 @@
+
+<div class="text-center">
+  <section class="py-16 sm:py-20">
+    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 tracking-tight">
+      آینده آموزش را تجربه کنید
+    </h1>
+    <p class="mt-6 max-w-3xl mx-auto text-lg sm:text-xl text-gray-600">
+      پلتفرم جامع آکادمی هوشمند، با بهره‌گیری از آخرین دستاوردهای هوش مصنوعی، یادگیری و پژوهش را برای شما آسان‌تر، سریع‌تر و عمیق‌تر می‌کند.
+    </p>
+    <div class="mt-10 flex justify-center gap-4">
+      <a routerLink="/exercise-hub" class="inline-block bg-cyan-600 text-white font-semibold px-8 py-3 rounded-lg shadow-md hover:bg-cyan-700 transition-all transform hover:scale-105">
+        شروع یادگیری
+      </a>
+    </div>
+  </section>
+
+  <section class="py-16 sm:py-20 bg-gray-100 rounded-2xl">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-3xl font-bold text-gray-900">هاب‌های تخصصی ما</h2>
+      <p class="mt-4 text-gray-600">ابزارهای قدرتمند برای تمام نیازهای آموزشی و پژوهشی شما</p>
+      <div class="mt-12 grid gap-8 md:grid-cols-2 lg:grid-cols-4">
+        @for (hub of hubs; track hub.title) {
+          <div class="bg-white p-8 rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-300 text-right transform hover:-translate-y-2">
+            <div class="flex items-center justify-center h-12 w-12 rounded-full bg-cyan-100 text-cyan-600 mx-auto mb-6">
+              <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" [attr.d]="hub.icon" />
+              </svg>
+            </div>
+            <h3 class="text-xl font-bold text-gray-900">{{ hub.title }}</h3>
+            <p class="mt-4 text-gray-600">{{ hub.description }}</p>
+            <a [routerLink]="hub.link" class="mt-6 inline-block text-cyan-600 font-semibold hover:text-cyan-800 transition-colors">
+              شروع کنید &larr;
+            </a>
+          </div>
+        }
+      </div>
+    </div>
+  </section>
+</div>

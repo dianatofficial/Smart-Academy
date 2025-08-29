@@ -1,0 +1,93 @@
+
+<div class="max-w-4xl mx-auto">
+  <div class="text-center mb-10">
+    <h1 class="text-3xl font-bold text-gray-900">هاب دستیار پژوهش</h1>
+    <p class="mt-2 text-gray-600">ابزارهای هوشمند برای تسریع و بهبود فرآیندهای پژوهشی شما.</p>
+  </div>
+
+  @if(apiKeyError()) {
+    <div class="bg-red-100 border-r-4 border-red-500 text-red-700 p-4 rounded-lg" role="alert">
+      <p class="font-bold">خطای پیکربندی</p>
+      <p>کلید API برای ارتباط با سرویس هوش مصنوعی تنظیم نشده است.</p>
+    </div>
+  } @else {
+    <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-lg border border-gray-200">
+        <div class="border-b border-gray-200 mb-6">
+            <nav class="-mb-px flex space-x-6 space-x-reverse" aria-label="Tabs">
+              <button (click)="setMode('literature-review')" [class.border-cyan-500]="mode() === 'literature-review'" [class.text-cyan-600]="mode() === 'literature-review'" class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300">
+                دستیار مرور ادبیات
+              </button>
+              <button (click)="setMode('summarizer')" [class.border-cyan-500]="mode() === 'summarizer'" [class.text-cyan-600]="mode() === 'summarizer'" class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300">
+                خلاصه‌ساز مقالات
+              </button>
+              <button (click)="setMode('paraphraser')" [class.border-cyan-500]="mode() === 'paraphraser'" [class.text-cyan-600]="mode() === 'paraphraser'" class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300">
+                بازنویسی آکادمیک
+              </button>
+              <button (click)="setMode('proposal')" [class.border-cyan-500]="mode() === 'proposal'" [class.text-cyan-600]="mode() === 'proposal'" class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300">
+                دستیار پروپوزال‌نویسی
+              </button>
+            </nav>
+        </div>
+
+        <div>
+            <label for="topic" class="block text-sm font-medium text-gray-700 mb-2">موضوع پژوهش</label>
+            <input type="text" id="topic" name="topic"
+                [ngModel]="topic()" (ngModelChange)="topic.set($event)"
+                [placeholder]="isModeImplemented() ? 'موضوع مورد نظر خود را وارد کنید...' : 'این قابلیت به زودی اضافه خواهد شد'"
+                [disabled]="!isModeImplemented()"
+                class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-cyan-500 focus:border-cyan-500 block p-2.5 disabled:bg-gray-200">
+        </div>
+
+        <div class="mt-6">
+            @if (!isModeImplemented()) {
+                <div class="bg-yellow-100 border-r-4 border-yellow-500 text-yellow-700 p-4 rounded-lg" role="alert">
+                  <p>این قابلیت در حال حاضر در دست توسعه است و به زودی در دسترس قرار خواهد گرفت.</p>
+                </div>
+            } @else {
+                <button (click)="getLiteratureReview()" [disabled]="loading() || !topic()"
+                    class="w-full flex justify-center items-center gap-2 bg-cyan-600 text-white font-semibold px-6 py-3 rounded-lg shadow-md hover:bg-cyan-700 transition-all disabled:bg-gray-400 disabled:cursor-not-allowed">
+                @if(loading()) {
+                    <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    <span>در حال جستجو و تحلیل...</span>
+                } @else {
+                    <span>شروع پژوهش</span>
+                }
+                </button>
+            }
+        </div>
+    </div>
+
+    @if(error()) {
+      <div class="mt-8 bg-red-100 border border-red-200 text-red-800 p-4 rounded-lg">
+        <p><strong>خطا:</strong> {{ error() }}</p>
+      </div>
+    }
+
+    @if(result()) {
+      <div class="mt-8 bg-white p-6 sm:p-8 rounded-2xl shadow-lg border border-gray-200">
+        <h2 class="text-2xl font-bold mb-4 border-b pb-2">نتایج پژوهش</h2>
+        <div class="prose prose-lg max-w-none text-right" [innerHTML]="result() | safeHtml"></div>
+
+        @if(sources().length > 0) {
+            <div class="mt-8">
+                <h3 class="text-xl font-bold mb-4 border-b pb-2">منابع مورد استفاده</h3>
+                <ul class="space-y-3">
+                    @for(source of sources(); track $index) {
+                        @if(source.web) {
+                            <li class="p-3 bg-gray-50 rounded-lg border border-gray-200">
+                                <a [href]="source.web.uri" target="_blank" rel="noopener noreferrer" class="text-cyan-700 hover:underline font-medium break-words">
+                                    {{ source.web.title || source.web.uri }}
+                                </a>
+                            </li>
+                        }
+                    }
+                </ul>
+            </div>
+        }
+      </div>
+    }
+  }
+</div>
